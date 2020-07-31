@@ -1,0 +1,5 @@
+package com.wordpress.agetechnology.convidados.view.listener
+
+interface GuestListener {
+    fun onClick(id: Int)
+}

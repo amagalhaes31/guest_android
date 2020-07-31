@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.wordpress.agetechnology.convidados.R
+import com.wordpress.agetechnology.convidados.service.constants.GuestConstants
 import com.wordpress.agetechnology.convidados.viewmodel.GuestFormViewModel
 import kotlinx.android.synthetic.main.activity_guest_form.*
 
@@ -20,7 +21,10 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
 
         mViewModel = ViewModelProvider(this).get(GuestFormViewModel::class.java)
 
+        loadData()
+
         setListners()
+
         observe()
     }
 
@@ -34,6 +38,16 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+
+    private fun loadData(){
+        val bundle = intent.extras
+        if(bundle != null) {
+            val id = bundle.getInt(GuestConstants.GUESTID)
+            mViewModel.load(id)
+        }
+    }
+
+
     private fun observe() {
         mViewModel.saveGuest.observe(this, Observer {
             if (it) {
@@ -42,6 +56,15 @@ class GuestFormActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(applicationContext, "Falha", Toast.LENGTH_LONG).show()
             }
             finish()
+        })
+
+        mViewModel.guest.observe(this, Observer {
+            edit_name.setText(it.name)
+            if(it.presence){
+                radio_present.isChecked = true
+            } else {
+                radio_absent.isChecked = true
+            }
         })
     }
 
