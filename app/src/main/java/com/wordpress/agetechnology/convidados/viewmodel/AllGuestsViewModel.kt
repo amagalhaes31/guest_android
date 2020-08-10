@@ -15,8 +15,11 @@ class AllGuestsViewModel(application: Application) : AndroidViewModel(applicatio
     private val mGuestList = MutableLiveData<List<GuestModel>>()
     val guestList: LiveData<List<GuestModel>> = mGuestList
 
-
     fun load() {
         mGuestList.value = mGuestRepository.getAll()
+    }
+
+    fun delete (id: Int){
+        mGuestRepository.delete(id)
     }
 }

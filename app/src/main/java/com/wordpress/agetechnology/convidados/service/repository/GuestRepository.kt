@@ -161,7 +161,7 @@ class GuestRepository private constructor(context: Context) {
     }
 
     // Delete
-    fun remove(id: Integer): Boolean {
+    fun delete(id: Int): Boolean {
         return try {
             // writableDatabase - Para fazer escrita de dados
             val db = mGuestDataBaseHelper.writableDatabase
