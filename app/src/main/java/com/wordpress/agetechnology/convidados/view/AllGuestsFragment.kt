@@ -14,17 +14,17 @@ import com.wordpress.agetechnology.convidados.R
 import com.wordpress.agetechnology.convidados.service.constants.GuestConstants
 import com.wordpress.agetechnology.convidados.view.adapter.GuestAdapter
 import com.wordpress.agetechnology.convidados.view.listener.GuestListener
-import com.wordpress.agetechnology.convidados.viewmodel.AllGuestsViewModel
+import com.wordpress.agetechnology.convidados.viewmodel.GuestsViewModel
 
 class AllGuestsFragment : Fragment() {
 
-    private lateinit var allGuestsViewModel: AllGuestsViewModel
+    private lateinit var allGuestsViewModel: GuestsViewModel
     private val mAdapter: GuestAdapter = GuestAdapter()
     private lateinit var mListener: GuestListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        allGuestsViewModel = ViewModelProvider(this).get(AllGuestsViewModel::class.java)
+        allGuestsViewModel = ViewModelProvider(this).get(GuestsViewModel::class.java)
 
         val root = inflater.inflate(R.layout.fragment_all, container, false)
 
@@ -49,9 +49,6 @@ class AllGuestsFragment : Fragment() {
         // Faz a ligação da RecyclerView com a listagem de itens
         recycler.adapter = mAdapter
 
-        // Responsável por apresentar a lista dos convidados
-        observer()
-
         // Interface
         mListener = object : GuestListener{
             override fun onClick(id: Int) {
@@ -64,19 +61,21 @@ class AllGuestsFragment : Fragment() {
 
             override fun onDelete(id: Int) {
                 allGuestsViewModel.delete(id)
-                allGuestsViewModel.load()
+                allGuestsViewModel.load(GuestConstants.FILTER.EMPTY)
             }
 
         }
 
         mAdapter.attachListener(mListener)
+        // Responsável por apresentar a lista dos convidados
+        observer()
 
         return root
     }
 
     override fun onResume() {
         super.onResume()
-        allGuestsViewModel.load()
+        allGuestsViewModel.load(GuestConstants.FILTER.EMPTY)
     }
     private fun observer() {
        allGuestsViewModel.guestList.observe(viewLifecycleOwner, Observer {
